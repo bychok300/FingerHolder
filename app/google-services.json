@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "52956688119",
+    "firebase_url": "https://fingerholder-abaa7.firebaseio.com",
+    "project_id": "fingerholder-abaa7",
+    "storage_bucket": "fingerholder-abaa7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:52956688119:android:31dc03e8b0f0ea01",
+        "android_client_info": {
+          "package_name": "holder.bychek.com.fingerholder"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "52956688119-fo24ncbkbfmlo397h3ruageiii7bghj9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCVvt2Ct3ugdHDyDcfjtYN8woVchQLD81U"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
