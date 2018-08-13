@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_leaderboard"
+        android:enabled="true"
+        android:title="@string/liderboard"
+        android:icon="@drawable/ic_menu_leaderboard"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_multiplayer"
+        android:enabled="true"
+        android:title="@string/multiplayer"
+        android:icon="@drawable/ic_menu_multiplayer"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_play_game"
+        android:enabled="true"
+        android:title="@string/play_game"
+        android:icon="@drawable/ic_menu_play_game"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_statistic"
+        android:enabled="true"
+        android:title="@string/statistic"
+        android:icon="@drawable/ic_menu_statistic"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_menu"
+        android:enabled="true"
+        android:title="@string/menu"
+        android:icon="@drawable/ic_menu_menu"
+        app:showAsAction="ifRoom" />
+</menu>

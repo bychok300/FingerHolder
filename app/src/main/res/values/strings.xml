@@ -30,9 +30,17 @@
     <string name="lbl_forgot_password">Забыли пароль?</string>
     <string name="forgot_password_msg">Нам нужен ваш Email что бы отправить инструкцию по востановлению пароля.</string>
     <string name="title_activity_maps">Карта</string>
-    <string name="mainBtn">Сделать денег</string>
+    <string name="mainBtn">Играть</string>
     <string name="exit">Выйти</string>
     <string name="found_money">Вывести деньги</string>
     <string name="btn_privacy">Регистрируясь в этом приложении вы принимаете условия конфидициальности и использования</string>
     <string name="privacy_txt">Регистрируясь в этом приложении вы отказываетесь от каких-либо претензий, жалоб, недовольств, возмущений и прочих типов выражения собсвенной индивидуальности в адресс разработчика. Все данные пользователей храняться зашифрованными и не передаются 3-м лицам</string>
+    <string name="liderboard">Лидеры</string>
+    <string name="multiplayer">multiplayer</string>
+    <string name="play_game">Играть</string>
+    <string name="statistic">Статистика</string>
+    <string name="menu">Меню</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

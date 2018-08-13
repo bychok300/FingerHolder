@@ -31,7 +31,7 @@
             tools:replace="android:value" />
 
         <activity
-            android:name=".GetMoneyActivity"
+            android:name=".GameAcivity"
             android:label="@string/title_activity_maps"
             android:screenOrientation="portrait"
             />
