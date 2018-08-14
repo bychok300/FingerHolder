@@ -44,7 +44,7 @@ public class SignupActivity extends AppCompatActivity {
         inputEmail = (EditText) findViewById(R.id.email);
         inputPassword = (EditText) findViewById(R.id.password);
         inputPhone = (EditText) findViewById(R.id.phone);
-
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
         btnResetPassword = (Button) findViewById(R.id.btn_reset_password);
 
         btnResetPassword.setOnClickListener(new View.OnClickListener() {
@@ -117,13 +117,13 @@ public class SignupActivity extends AppCompatActivity {
                                     DatabaseReference currentUserDb = FirebaseDatabase.getInstance().getReference().child("users").child(userId);
                                     Map userInfo = new HashMap<>();
                                     userInfo.put("email", email);
-                                    userInfo.put("moneyAmount", "1");
+                                    userInfo.put("moneyAmount", 1);
                                     userInfo.put("phone", phone);
                                     userInfo.put("isAdmin", "no");
-                                    userInfo.put("totalTimeHolding", "0");
-                                    userInfo.put("localTimeHolding", "0");
+                                    userInfo.put("totalTimeHolding", "00:00:00");
+                                    userInfo.put("localTimeHolding", "00:00:00");
                                     currentUserDb.updateChildren(userInfo);
-                                    startActivity(new Intent(SignupActivity.this, GetMoneyActivity.class));
+                                    startActivity(new Intent(SignupActivity.this, GameAcivity.class));
                                     finish();
                                 }
                             }

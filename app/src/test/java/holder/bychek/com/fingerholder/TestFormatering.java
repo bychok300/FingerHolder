@@ -49,8 +49,12 @@ public class TestFormatering {
     @Test
     public void sumOfTwoDates(){
         String rs = Util.sumOfTwoTime("00:01:01","01:10:01");
+        System.out.println(rs);
+    }
 
-        //String rs = Util.sumOfTwoStringDates("00:01:00","00:01:00");
+    @Test
+    public void calculateFiveMinutes(){
+        long rs = Util.calculateHomMuchFiveMinutesInTime(Util.timeToSeconds("01:13:00"));
         System.out.println(rs);
     }
 

@@ -38,10 +38,19 @@ public class Util {
     }
 
     public static long timeToSeconds(String time) {
+        long hours = 0;
+        long minutes;
+        long seconds;
         String[] hourMinSec = time.split(":");
-        long hours = Long.parseLong(hourMinSec[0]);
-        long minutes = Long.parseLong(hourMinSec[1]);
-        long seconds = Long.parseLong(hourMinSec[2]);
+        if (hourMinSec.length == 3){
+            hours = Long.parseLong(hourMinSec[0]);
+            minutes = Long.parseLong(hourMinSec[1]);
+            seconds = Long.parseLong(hourMinSec[2]);
+
+        } else {
+            minutes = Long.parseLong(hourMinSec[1]);
+            seconds = Long.parseLong(hourMinSec[2]);
+        }
 
         return seconds + (60 * minutes) + (3600 * hours);
     }
@@ -51,6 +60,10 @@ public class Util {
     }
     public static String sumOfTwoTime(long first, long second) {
         return Util.secondsToTime(first+second);
+    }
+
+    public static long calculateHomMuchFiveMinutesInTime(long time){
+        return time / 300;
     }
 
 }
