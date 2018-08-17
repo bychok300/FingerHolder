@@ -84,6 +84,14 @@
             android:src="@drawable/ic_game_coin"
             android:visibility="invisible"/>
 
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="39dp"
+            android:layout_height="33dp"
+            android:layout_above="@+id/clickForMoneyBnt"
+            android:layout_toStartOf="@+id/userAmountMoney"
+            android:src="@drawable/ic_game_wallet" />
+
     </RelativeLayout>
 
 </FrameLayout>

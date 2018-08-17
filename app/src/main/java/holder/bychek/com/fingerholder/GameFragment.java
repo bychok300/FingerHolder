@@ -36,24 +36,8 @@ import java.util.TimerTask;
 import holder.bychek.com.fingerholder.Utils.TimeUtils;
 
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link GameFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link GameFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class GameFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
     private OnFragmentInteractionListener mListener;
 
     private FirebaseAuth auth = FirebaseAuth.getInstance();
@@ -67,43 +51,21 @@ public class GameFragment extends Fragment {
     private String totalTime;
     private ImageView coinReward;
 
-    public GameFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment GameFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static GameFragment newInstance(String param1, String param2) {
-        GameFragment fragment = new GameFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
-
+    //обновление поля с количеством монет
     private void updateBalance() {
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
-                userMoneyField.setText("Блаксов : " + counter);
+                userMoneyField.setText(String.valueOf(counter));
             }
         });
     }
-
+    //выставим видимость новой добавленной монетки
     private void setCoinVisible() {
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
@@ -114,20 +76,7 @@ public class GameFragment extends Fragment {
 
     }
 
-    private void changeCoinVisibility() {
-        new Handler(Looper.getMainLooper()).post(new Runnable() {
-            @Override
-            public void run() {
-                if (coinReward.getVisibility() == View.VISIBLE) {
-                    coinReward.setVisibility(View.INVISIBLE);
-                } else {
-                    coinReward.setVisibility(View.VISIBLE);
-                }
-            }
-        });
-
-    }
-
+    // сделаем фэйдаут (мягкое растворение) новой монетки
     private void fadeOutAndHideImage(final ImageView img) {
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
@@ -135,9 +84,9 @@ public class GameFragment extends Fragment {
                 Animation fadeOut = new AlphaAnimation(1, 0);
                 fadeOut.setInterpolator(new AccelerateInterpolator());
                 fadeOut.setDuration(1000);
-
                 fadeOut.setAnimationListener(new Animation.AnimationListener() {
                     public void onAnimationStart(Animation animation) {
+
                     }
 
                     public void onAnimationEnd(Animation animation) {
@@ -145,16 +94,14 @@ public class GameFragment extends Fragment {
                     }
 
                     public void onAnimationRepeat(Animation animation) {
+
                     }
-
                 });
-
                 img.startAnimation(fadeOut);
             }
         });
 
     }
-
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -166,8 +113,6 @@ public class GameFragment extends Fragment {
         usersdb.child("moneyAmount").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
                 counter = dataSnapshot.getValue(Long.class);
             }
 
@@ -190,7 +135,7 @@ public class GameFragment extends Fragment {
 
             @Override
             public void onCancelled(DatabaseError error) {
-                Toast.makeText(getContext(), "Не удалось считать значение из базы данных, обратитесь к администартору", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "Не удалось считать значение из базы данных, обратитесь к администартору." + error.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
         //главная кнопка
@@ -236,7 +181,6 @@ public class GameFragment extends Fragment {
                             usersdb.child("moneyAmount").setValue(Long.valueOf(counter));
                         } else {
                             timer.cancel();
-
                         }
                     }
                 }, 0, 2000); // повторяем каждые 2 секунды
@@ -261,19 +205,11 @@ public class GameFragment extends Fragment {
                     String sumTime = TimeUtils.sumOfTwoTime(chronometer.getText().toString(), totalTime);
                     usersdb.child("totalTimeHolding").setValue(sumTime);
                 }
-
                 return false;
             }
         });
 
         return view;
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
     }
 
     @Override
@@ -282,6 +218,7 @@ public class GameFragment extends Fragment {
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
         } else {
+            //что произайдет когда фрагмент будет прикреплён
 //            throw new RuntimeException(context.toString()
 //                    + " must implement OnFragmentInteractionListener");
         }

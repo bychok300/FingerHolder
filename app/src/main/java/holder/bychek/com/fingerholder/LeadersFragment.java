@@ -1,7 +1,6 @@
 package holder.bychek.com.fingerholder;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -26,59 +25,18 @@ import java.util.Map;
 import holder.bychek.com.fingerholder.Utils.TimeUtils;
 import holder.bychek.com.fingerholder.Utils.Utils;
 
-
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link LeadersFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link LeadersFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class LeadersFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-    private Map<String, Long> userTotTimeHold = new HashMap<>();
 
+    private Map<String, Long> userTotTimeHold = new HashMap<>();
     ListView leadersListView;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     private OnFragmentInteractionListener mListener;
-
-    public LeadersFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment LeadersFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static LeadersFragment newInstance(String param1, String param2) {
-        LeadersFragment fragment = new LeadersFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+
     }
 
     @Override
@@ -86,35 +44,38 @@ public class LeadersFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_leaders, container, false);
-
+        //инициализируемм массив с лидерами
         final ArrayList<String> leadersArray = new ArrayList<>();
-
+        //найдём наш список
         leadersListView = (ListView) view.findViewById(R.id.list_of_leaders);
+        //пойдём в базу и вытащим оттуда общее время удержания кнопки
         DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
         DatabaseReference usersdRef = rootRef.child("users");
+        //реализуем листнер евентов
         ValueEventListener eventListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                    String name = ds.child("email").getValue(String.class);
+                    String name = ds.child("email").getValue(String.class); // пока вместо имени юзаем имеил
                     String totalTimeHolding = ds.child("totalTimeHolding").getValue(String.class);
+                    //сконвертируем для удобства подсчета лидеров
                     long totalTime = TimeUtils.timeToSeconds(totalTimeHolding);
-
+                    //положим всё в мапу для отображения имени и его рекорда
                     userTotTimeHold.put(name, Long.valueOf(totalTime));
-                    leadersArray.add(name);
 
                 }
-                userTotTimeHold = Utils.sortByComparator(userTotTimeHold, "asc");
+                //отсортируем по количеству времени удержания кнопки
+                userTotTimeHold = Utils.sortByComparator(userTotTimeHold, "asc"); //TODO поправить тип сортировки
+                //теперь положим все значения в список(потому что будем класть всё в адаптер)
                 List<String> list = new ArrayList<>();
                 for (Map.Entry<String, Long> entry : userTotTimeHold.entrySet()) {
                     list.add(entry.getKey() + " : \n" + TimeUtils.secondsToTime(entry.getValue()));
                 }
-
+                //установим адаптер который выведет всё на экран и превратит массив в listView
                 ArrayAdapter<String> adapter = new ArrayAdapter<>(
                         getActivity(),
                         android.R.layout.simple_list_item_activated_1,
                         list);
-
                 leadersListView.setAdapter(adapter);
 
             }
@@ -124,15 +85,9 @@ public class LeadersFragment extends Fragment {
                 Toast.makeText(getContext(), "Не удалось считать данные по причине : " + databaseError.getMessage(), Toast.LENGTH_LONG ).show();
             }
         };
+        //установим слушатель
         usersdRef.addListenerForSingleValueEvent(eventListener);
         return view;
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
     }
 
     @Override
