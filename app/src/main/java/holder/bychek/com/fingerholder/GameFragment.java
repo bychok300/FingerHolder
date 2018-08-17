@@ -2,9 +2,9 @@ package holder.bychek.com.fingerholder;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.SystemClock;
@@ -13,8 +13,12 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.Chronometer;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,12 +30,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import holder.bychek.com.fingerholder.Utils.Util;
+import holder.bychek.com.fingerholder.Utils.TimeUtils;
 
 
 /**
@@ -63,6 +65,7 @@ public class GameFragment extends Fragment {
     private String userId = currUser.getUid();
     private DatabaseReference usersdb = FirebaseDatabase.getInstance().getReference("users").child(userId);
     private String totalTime;
+    private ImageView coinReward;
 
     public GameFragment() {
         // Required empty public constructor
@@ -92,14 +95,66 @@ public class GameFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
-    private void updateUI()
-    {
+    private void updateBalance() {
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
-            public void run() {userMoneyField.setText("Блаксов : " + counter);
+            public void run() {
+                userMoneyField.setText("Блаксов : " + counter);
             }
-        }) ;
+        });
     }
+
+    private void setCoinVisible() {
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                coinReward.setVisibility(View.VISIBLE);
+            }
+        });
+
+    }
+
+    private void changeCoinVisibility() {
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                if (coinReward.getVisibility() == View.VISIBLE) {
+                    coinReward.setVisibility(View.INVISIBLE);
+                } else {
+                    coinReward.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+    }
+
+    private void fadeOutAndHideImage(final ImageView img) {
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                Animation fadeOut = new AlphaAnimation(1, 0);
+                fadeOut.setInterpolator(new AccelerateInterpolator());
+                fadeOut.setDuration(1000);
+
+                fadeOut.setAnimationListener(new Animation.AnimationListener() {
+                    public void onAnimationStart(Animation animation) {
+                    }
+
+                    public void onAnimationEnd(Animation animation) {
+                        img.setVisibility(View.GONE);
+                    }
+
+                    public void onAnimationRepeat(Animation animation) {
+                    }
+
+                });
+
+                img.startAnimation(fadeOut);
+            }
+        });
+
+    }
+
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -115,10 +170,11 @@ public class GameFragment extends Fragment {
                 // whenever data at this location is updated.
                 counter = dataSnapshot.getValue(Long.class);
             }
+
             @Override
             public void onCancelled(DatabaseError error) {
                 // Failed to read value
-                Toast.makeText(getContext(),"Не удалось считать значение из базы данных, обратитесь к администартору", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "Не удалось считать значение из базы данных, обратитесь к администартору", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -131,9 +187,10 @@ public class GameFragment extends Fragment {
                 totalTimeText = (TextView) view.findViewById(R.id.totalTimeValue);
                 totalTimeText.setText(totalTime);
             }
+
             @Override
             public void onCancelled(DatabaseError error) {
-                Toast.makeText(getContext(),"Не удалось считать значение из базы данных, обратитесь к администартору", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "Не удалось считать значение из базы данных, обратитесь к администартору", Toast.LENGTH_LONG).show();
             }
         });
         //главная кнопка
@@ -148,14 +205,17 @@ public class GameFragment extends Fragment {
         chronometer.setFormat("00:%s");
         chronometer.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
             public void onChronometerTick(Chronometer c) {
-                long elapsedMillis = SystemClock.elapsedRealtime() -c.getBase();
-                if(elapsedMillis > 3600000L){
+                long elapsedMillis = SystemClock.elapsedRealtime() - c.getBase();
+                if (elapsedMillis > 3600000L) {
                     c.setFormat("0%s");
-                }else{
+                } else {
                     c.setFormat("00:%s");
                 }
             }
         });
+
+        //инициализируем анимацию которая будет добавляться каждый раз когда увеличивается баланс
+        coinReward = (ImageView) view.findViewById(R.id.coin_reward);
 
         //устанавливаем листнер, который будет запускать наращивание монет если кнопка зажата
         clickForMoneyBnt.setOnLongClickListener(new View.OnLongClickListener() {
@@ -165,11 +225,13 @@ public class GameFragment extends Fragment {
                 timer.schedule(new TimerTask() {
                     @Override
                     public void run() {
-                        if(clickForMoneyBnt.isPressed()) {
+                        if (clickForMoneyBnt.isPressed()) {
                             //увеличим значение монет
                             counter += 1;
+                            setCoinVisible();
+                            fadeOutAndHideImage(coinReward);
                             System.out.println(counter);
-                            updateUI();
+                            updateBalance();
                             //запишем это значение в базу
                             usersdb.child("moneyAmount").setValue(Long.valueOf(counter));
                         } else {
@@ -177,8 +239,7 @@ public class GameFragment extends Fragment {
 
                         }
                     }
-                },1000,2000); // повторяем каждые 2 секунды с задержкой в секунду
-
+                }, 0, 2000); // повторяем каждые 2 секунды
                 return true;
             }
         });
@@ -186,18 +247,18 @@ public class GameFragment extends Fragment {
         clickForMoneyBnt.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
-                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN){
+                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
                     //стартуем хронометр
                     chronometer.setBase(SystemClock.elapsedRealtime());
                     chronometer.start();
                 }
-                if (motionEvent.getAction() == MotionEvent.ACTION_UP){
+                if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
                     //останавливаем хронометр
                     chronometer.stop();
                     //запишем в базу время сколько была зажата кнопка
                     usersdb.child("localTimeHolding").setValue(chronometer.getText());
                     //запишем в базу сумму времени последнего зажатия с общим временем
-                    String sumTime = Util.sumOfTwoTime(chronometer.getText().toString(), totalTime);
+                    String sumTime = TimeUtils.sumOfTwoTime(chronometer.getText().toString(), totalTime);
                     usersdb.child("totalTimeHolding").setValue(sumTime);
                 }
 
