@@ -8,15 +8,16 @@
 
     <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="394dp">
 
         <Button
 
             android:id="@+id/clickForMoneyBnt"
             android:layout_width="200dp"
             android:layout_height="200dp"
-            android:layout_below="@+id/totalTimeUsrText"
+            android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
+            android:layout_marginBottom="66dp"
             android:background="@drawable/main_btn"
             android:text="@string/mainBtn"
             android:textAlignment="center"
@@ -24,10 +25,10 @@
 
         <TextView
             android:id="@+id/userAmountMoney"
-            android:layout_width="313dp"
+            android:layout_width="81dp"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/localTimeHold"
-            android:layout_centerHorizontal="true"
+            android:layout_above="@+id/clickForMoneyBnt"
+            android:layout_alignParentEnd="true"
             android:layout_gravity="center_horizontal"
             android:text="Рублей :"
             android:textAlignment="center"
@@ -37,8 +38,8 @@
             android:id="@+id/chronometer"
             android:layout_width="65dp"
             android:layout_height="wrap_content"
-            android:layout_alignEnd="@+id/clickForMoneyBnt"
-            android:layout_below="@+id/clickForMoneyBnt"
+            android:layout_alignParentEnd="true"
+            android:layout_alignTop="@+id/localTimeHold"
             android:layout_gravity="center_horizontal"
             android:textColor="@color/white" />
 
@@ -46,8 +47,9 @@
             android:id="@+id/localTimeHold"
             android:layout_width="144dp"
             android:layout_height="20dp"
-            android:layout_below="@+id/clickForMoneyBnt"
-            android:layout_toStartOf="@+id/chronometer"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="80dp"
             android:text="Вы держали кнопку :"
             android:textColor="@color/white" />
 
@@ -55,10 +57,8 @@
             android:id="@+id/totalTimeUsrText"
             android:layout_width="125dp"
             android:layout_height="41dp"
-            android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:layout_marginStart="56dp"
-            android:layout_marginTop="56dp"
+            android:layout_centerHorizontal="true"
             android:gravity="center"
             android:text="За всё время вы держали кнопку"
             android:textColor="@color/white" />
@@ -67,12 +67,30 @@
             android:id="@+id/totalTimeValue"
             android:layout_width="58dp"
             android:layout_height="41dp"
-            android:layout_above="@+id/clickForMoneyBnt"
             android:layout_alignParentEnd="true"
-            android:layout_marginEnd="136dp"
+            android:layout_alignParentTop="true"
             android:gravity="center_horizontal|center"
             android:text=""
             android:textColor="@color/white" />
+
+        <ImageView
+            android:id="@+id/coin_reward"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignStart="@+id/totalTimeValue"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="158dp"
+            android:src="@drawable/ic_game_coin"
+            android:visibility="invisible"/>
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="39dp"
+            android:layout_height="33dp"
+            android:layout_above="@+id/clickForMoneyBnt"
+            android:layout_toStartOf="@+id/userAmountMoney"
+            android:src="@drawable/ic_game_wallet" />
 
     </RelativeLayout>
 

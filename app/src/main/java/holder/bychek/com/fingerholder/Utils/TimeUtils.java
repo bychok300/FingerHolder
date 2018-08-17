@@ -1,6 +1,6 @@
 package holder.bychek.com.fingerholder.Utils;
 
-public class Util {
+public class TimeUtils {
 
     public static String secondsToTime(long totalSeconds) {
 
@@ -56,10 +56,10 @@ public class Util {
     }
 
     public static String sumOfTwoTime(String first, String second) {
-        return Util.secondsToTime(Util.timeToSeconds(first) + Util.timeToSeconds(second));
+        return TimeUtils.secondsToTime(TimeUtils.timeToSeconds(first) + TimeUtils.timeToSeconds(second));
     }
     public static String sumOfTwoTime(long first, long second) {
-        return Util.secondsToTime(first+second);
+        return TimeUtils.secondsToTime(first+second);
     }
 
     public static long calculateHomMuchFiveMinutesInTime(long time){
